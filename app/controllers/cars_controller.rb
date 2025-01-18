@@ -4,6 +4,7 @@ class CarsController < ApplicationController
   # GET /cars or /cars.json
   def index
     @cars = Car.all
+    render json: @cars
   end
 
   # GET /cars/1 or /cars/1.json
@@ -21,16 +22,17 @@ class CarsController < ApplicationController
 
   # POST /cars or /cars.json
   def create
+    # Log the raw JSON data for debugging (optional)
+    body_data = request.raw_post
+    Rails.logger.info("Raw body data: #{body_data}")
+  
+    # Parse the body data automatically with params
     @car = Car.new(car_params)
-
-    respond_to do |format|
-      if @car.save
-        format.html { redirect_to @car, notice: "Car was successfully created." }
-        format.json { render :show, status: :created, location: @car }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @car.errors, status: :unprocessable_entity }
-      end
+  
+    if @car.save
+      render json: { message: "Car was successfully created.", car: @car }, status: :created
+    else
+      render json: { errors: @car.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -55,6 +57,10 @@ class CarsController < ApplicationController
       format.html { redirect_to cars_path, status: :see_other, notice: "Car was successfully destroyed." }
       format.json { head :no_content }
     end
+  end
+
+  def best_car
+    render "best_carss"
   end
 
   private

@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
+  # get "user/name:string"
+  # get "user/email:string"
+  resources :blogs
   resources :cars
+  # resources :users
+  get '/user', to: 'user#create'
+  get '/best_car', to: 'cars#best_car'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
